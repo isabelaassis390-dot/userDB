@@ -34,8 +34,6 @@ app.post('/users', async (req, res) => {
     }
 });
 
-
-//R
 app.get('/users', async(req, res) => {
     try{
         const rows = await pool.query('SELECT * FROM user;');
@@ -52,7 +50,13 @@ app.delete('/users/:id', async (req, res) => {
     try{
         const id = req.params.id;
         const del = await pool.query('DELETE FROM user WHERE id = ?;',
-        [id] );
+            [id]
+        );
+        
+        if(rows[0].affectedRows == 0){
+            throw new Error("Erro ao deletar usuário!")
+        }
+
         res.status(200).json({msg: "Usuário apagado com sucesso!"})
     }
     catch(error){
