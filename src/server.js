@@ -1,10 +1,15 @@
 import 'dotenv/config'; 
-
 import express from 'express';
 import mysql from 'mysql2/promise';
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from './doc/swagger-output.json' with {type: 'json'}
+
+const app = express();
+
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 const port = 3000;
-const app = express();
+
 app.use(express.json());
 
 
@@ -41,7 +46,6 @@ app.get('/users', async(req, res) => {
     try{
         const rows = await pool.query('SELECT * FROM user;');
         res.status(200).json(rows[0]);
-
     }
     catch(error){
         console.error(error)
